@@ -1,4 +1,9 @@
-<img id="ansi81" src="ansi81.bmp" onload="load()">
+<p>
+	<button onclick="loadfont('ansi81')">ansi81</button>
+	<button onclick="loadfont('screen13')">screen13</button>
+</p>
+
+<img id="fontimg" onload="load()">
 <canvas id="mycanvas"></canvas>
 <div id="mydata"></div>
 
@@ -12,15 +17,20 @@
 
 <script type="text/javascript">
 
+function loadfont(name) {
+	console.log('loading font:', name)
+	fontimg.src = name + '.bmp'
+}
+
 function load() {
-	console.log(ansi81.width, ansi81.height);
-	// console.log(ansi81, mycanvas);
+	console.log(fontimg.width, fontimg.height);
+	// console.log(fontimg, mycanvas);
 
 	// get pixel data
-	mycanvas.height = ansi81.height;
-	mycanvas.width = ansi81.width;
+	mycanvas.height = fontimg.height;
+	mycanvas.width = fontimg.width;
 	const ctx = mycanvas.getContext('2d');
-	ctx.drawImage(ansi81, 0, 0);
+	ctx.drawImage(fontimg, 0, 0);
 	const px = ctx.getImageData(0, 0, mycanvas.width, mycanvas.height).data;
 	console.log(px)
 
