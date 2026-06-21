@@ -1,0 +1,53 @@
+<img id="ansi81" src="ansi81.bmp" onload="load()">
+<canvas id="mycanvas"></canvas>
+<div id="mydata"></div>
+
+
+<style type="text/css">
+#mydata {
+	font-family: monospace;
+}
+</style>
+
+
+<script type="text/javascript">
+
+function load() {
+	console.log(ansi81.width, ansi81.height);
+	// console.log(ansi81, mycanvas);
+
+	// get pixel data
+	mycanvas.height = ansi81.height;
+	mycanvas.width = ansi81.width;
+	const ctx = mycanvas.getContext('2d');
+	ctx.drawImage(ansi81, 0, 0);
+	const px = ctx.getImageData(0, 0, mycanvas.width, mycanvas.height).data;
+	console.log(px)
+
+	// convert pixel data to 1-bit data
+	const px1d = [];
+	const mid = Math.floor(255 * 3 / 2);
+	for (let i = 0; i < px.length; i += 4) {
+		const c = px[i] + px[i + 1] + px[i + 2];
+		px1d.push( c < mid ? 0 : 1 );
+	}
+	console.log(px1d);
+
+	// convert to 32-bit number
+	const hex = [];
+	for (let i = 0; i < px1d.length; i += 32) {
+		let s = px1d.slice(i, i+32).join('');
+		let n = parseInt(s, 2);
+		hex.push( '0x' + n.toString(16).padStart(8, '0') );
+	}
+	console.log(hex);
+
+	// print data to screen
+	for (let i = 0; i < hex.length; i++) {
+		mydata.innerHTML += hex[i] + ', ';
+		if ((i + 1) % 8 === 0)
+			mydata.innerHTML += '<br/>';
+	}
+}
+
+</script>
